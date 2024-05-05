@@ -1,7 +1,8 @@
 (ns kryptos.core
   (:require [clojure.string :as string]
             [kryptos.vigenere :as vigenere]
-            [kryptos.columnar-transposition :as transposition]))
+            [kryptos.columnar-transposition :as transposition])
+  (:gen-class))
 
 (defn- solution-format [text]
   (->> text
@@ -37,4 +38,5 @@
       (printf "%s: %s\n" (name k) v))
     (doseq [[k v] (:is-correct? solutions)]
       (when-not v
-        (printf "%s is incorrect\n" (name k))))))
+        (printf "%s is incorrect\n" (name k)))))
+  (println))
