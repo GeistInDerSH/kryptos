@@ -1,13 +1,13 @@
 (ns kryptos.columnar-transposition
-  (:require [clojure.math :as math]))
+  (:require [clojure.math :as math])
+  (:import (clojure.lang PersistentHashMap)))
 
 (defn- generate-columnar-matrix
   "Generate a 2d Java array with the text in the columnar order"
+  {:tag "[[Ljava.lang.Character;"
+   :static true}
   [text rows cols]
-  (let [raw (-> (for [_ (range rows)]
-                  (vec (repeat cols \space)))
-                vec)
-        arr (clojure.core/to-array-2d raw)
+  (let [arr (make-array Character/TYPE rows cols)
         index (atom 0)]
     (dotimes [col cols]
       (dotimes [row rows]
@@ -17,11 +17,10 @@
 
 (defn- generate-decipher-matrix
   "Generate a 2d Java array to use to decode the cipher text"
+  {:tag "[[Ljava.lang.Character;"
+   :static true}
   [key key-map rows cols cipher-matrix]
-  (let [raw (-> (for [_ (range rows)]
-                  (vec (repeat cols \space)))
-                vec)
-        arr (clojure.core/to-array-2d raw)]
+  (let [arr (make-array Character/TYPE rows cols)]
     (dotimes [col cols]
       (let [chr (get key col)
             col-index (get key-map chr)]
@@ -38,9 +37,9 @@
            value)
          (into {}))))
 
-(defn columnar-transposition
+(defn ^String columnar-transposition
   "https://en.wikipedia.org/wiki/Transposition_cipher#Columnar_transposition"
-  [text key]
+  [^String text ^String key]
   (let [cols (count key)
         rows (-> (count text)
                  (/ cols)
@@ -61,10 +60,10 @@
                    (inc col)
                    (conj letters letter))))))))
 
-(defn double-columnar-transposition
+(defn ^String double-columnar-transposition
   "Apply the columnar-transposition function on each of the given keys.
    The output of the first transposition will be used as the input for the second"
-  [text k1 k2]
+  [^String text ^String k1 ^String k2]
   (-> text
       (columnar-transposition k1)
       (columnar-transposition k2)))

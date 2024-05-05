@@ -3,7 +3,7 @@
 
 (def ^:private ^:static default-alphabet "abcdefghijklmnopqrstuvwxyz")
 
-(defn- generate-keyed-alphabet
+(defn- ^String generate-keyed-alphabet
   "Generate an alphabet that starts with the given key.
    The key must not have any repeated characters, and must
    not add any new characters to the given-alphabet"
@@ -24,7 +24,7 @@
                               ""))
        (str key alphabet)))))
 
-(defn- extend-key-to-text
+(defn- ^String extend-key-to-text
   "Repeatedly extend the key until the length matches the
    given text."
   [text key]
@@ -33,12 +33,12 @@
       (let [len (count extended)]
         (cond
           (= len text-length) extended
-          (< len text-length) (recur (str extended key))
+          (< len text-length) (recur (str extended extended))
           (> len text-length) (->> extended
-                               (take text-length)
-                               (apply str)))))))
+                                   (take text-length)
+                                   (apply str)))))))
 
-(defn- worker
+(defn- ^String worker
   "Worker does the actual work of encoding/decoding a Virgenere
    cipher.
    Because the logic is the same for encoding/decoding, the only
@@ -63,10 +63,10 @@
                  remainder))
         (apply str plain-text)))))
 
-(defn encode
-  ([text key] (encode text key ""))
-  ([text key alpha-key] (worker text key alpha-key #'+)))
+(defn ^String encode
+  ([^String text ^String key] (encode text key ""))
+  ([^String text ^String key ^String alpha-key] (worker text key alpha-key #'+)))
 
-(defn decode
-  ([text key] (decode text key ""))
-  ([text key alpha-key] (worker text key alpha-key #'-)))
+(defn ^String decode
+  ([^String text ^String key] (decode text key ""))
+  ([^String text ^String key ^String alpha-key] (worker text key alpha-key #'-)))
