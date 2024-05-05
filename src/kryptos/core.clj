@@ -1,7 +1,7 @@
 (ns kryptos.core
   (:require [clojure.string :as string]
             [kryptos.vigenere :as vigenere]
-            [kryptos.columnar-transposition :as columnar-transposition]))
+            [kryptos.columnar-transposition :as transposition]))
 
 (defn- solution-format [text]
   (->> text
@@ -19,17 +19,22 @@
 (def k3-solution (solution-format "SLOWLY DESPARATLY SLOWLY THE REMAINS OF PASSAGE DEBRIS THAT ENCUMBERED THE LOWER PART OF THE DOORWAY WAS REMOVED WITH TREMBLING HANDS I MADE A TINY BREACH IN THE UPPER LEFT HAND CORNER AND THEN WIDENING THE HOLE A LITTLE I INSERTED THE CANDLE AND PEERED IN THE HOT AIR ESCAPING FROM THE CHAMBER CAUSED THE FLAME TO FLICKER BUT PRESENTLY DETAILS OF THE ROOM WITHIN EMERGED FROM THE MIST X CAN YOU SEE ANYTHING Q ?"))
 (def k4-solution "¯\\_(ツ)_/¯")
 
+(defn get-solutions []
+  (let [key "kryptos"
+        sol-k1 (vigenere/decode k1 "palimpsest" key)
+        sol-k2 (vigenere/decode k2 "abscissa" key)
+        sol-k3 (transposition/double-columnar-transposition k3 "utsrqponmlkjihgfedcba" "~}zyxwvutsrqponmlkjihgfedcba")]
+  {:solutions {:k1 sol-k1
+               :k2 sol-k2
+               :k3 sol-k3}
+   :is-correct? {:k1 (= sol-k1 k1-solution)
+                 :k2 (= sol-k2 k2-solution)
+                 :k3 (= sol-k3 k3-solution)}}))
+
 (defn -main [& _]
-  (let [alpha-key "kryptos"
-        sol-k1 (vigenere/decode k1 "palimpsest" alpha-key)
-        sol-k2 (vigenere/decode k2 "abscissa" alpha-key)
-        sol-k3 (columnar-transposition/double-columnar-transposition k3
-                                                                     "utsrqponmlkjihgfedcba"
-                                                                     "~}zyxwvutsrqponmlkjihgfedcba")]
-  (println sol-k1)
-  (println sol-k2)
-  (println sol-k3)
-  (printf "K1 is correct: %s\n" (= k1-solution sol-k1))
-  (printf "K2 is correct: %s\n" (= k2-solution sol-k2))
-  (printf "K3 is correct: %s\n" (= k3-solution sol-k3))
-  ))
+  (let [solutions (get-solutions)]
+    (doseq [[k v] (:solutions solutions)]
+      (printf "%s: %s\n" (name k) v))
+    (doseq [[k v] (:is-correct? solutions)]
+      (when-not v
+        (printf "%s is incorrect\n" (name k))))))
