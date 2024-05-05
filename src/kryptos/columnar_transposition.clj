@@ -28,7 +28,7 @@
           (aset arr row col (aget cipher-matrix row col-index)))))
     arr))
 
-(defn- generate-key-map [key]
+(defn- ^PersistentHashMap generate-key-map [key]
   (let [index (atom 0)]
     (->> (for [entry (zipmap key (range))
                :let [[k _] entry
