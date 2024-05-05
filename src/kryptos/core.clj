@@ -1,6 +1,7 @@
 (ns kryptos.core
   (:require [clojure.string :as string]
-            [kryptos.vigenere :as vigenere]))
+            [kryptos.vigenere :as vigenere]
+            [kryptos.columnar-transposition :as columnar-transposition]))
 
 (defn- solution-format [text]
   (->> text
@@ -21,8 +22,14 @@
 (defn -main [& _]
   (let [alpha-key "kryptos"
         sol-k1 (vigenere/decode k1 "palimpsest" alpha-key)
-        sol-k2 (vigenere/decode k2 "abscissa" alpha-key)]
+        sol-k2 (vigenere/decode k2 "abscissa" alpha-key)
+        sol-k3 (columnar-transposition/double-columnar-transposition k3
+                                                                     "utsrqponmlkjihgfedcba"
+                                                                     "~}zyxwvutsrqponmlkjihgfedcba")]
   (println sol-k1)
   (println sol-k2)
+  (println sol-k3)
   (printf "K1 is correct: %s\n" (= k1-solution sol-k1))
-  (printf "K2 is correct: %s\n" (= k2-solution sol-k2))))
+  (printf "K2 is correct: %s\n" (= k2-solution sol-k2))
+  (printf "K3 is correct: %s\n" (= k3-solution sol-k3))
+  ))
