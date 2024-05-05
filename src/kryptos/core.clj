@@ -19,8 +19,9 @@
 (def k4-solution "¯\\_(ツ)_/¯")
 
 (defn -main [& _]
-  (let [sol-k1 (vigenere/decode k1 "palimpsest" "kryptos")
-        sol-k2 (vigenere/decode k2 "abscissa" "kryptos")]
+  (let [alpha-key "kryptos"
+        sol-k1 (vigenere/decode k1 "palimpsest" alpha-key)
+        sol-k2 (vigenere/decode k2 "abscissa" alpha-key)]
   (println sol-k1)
   (println sol-k2)
   (printf "K1 is correct: %s\n" (= k1-solution sol-k1))
