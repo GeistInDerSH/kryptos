@@ -33,7 +33,7 @@
     (->> (for [entry (zipmap key (range))
                :let [[k _] entry
                      value [k @index]
-                     _ (reset! index (inc @index))]]
+                     _ (swap! index inc)]]
            value)
          (into {}))))
 
