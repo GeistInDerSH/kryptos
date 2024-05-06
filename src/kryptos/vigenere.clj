@@ -1,5 +1,6 @@
 (ns kryptos.vigenere
-  (:require [clojure.string :as string]))
+  (:require [clojure.string :as string]
+            [clojure.math :as math]))
 
 (def ^:private ^:static default-alphabet "abcdefghijklmnopqrstuvwxyz")
 
@@ -28,15 +29,13 @@
   "Repeatedly extend the key until the length matches the
    given text."
   [text key]
-  (let [text-length (count text)]
-    (loop [extended key]
-      (let [len (count extended)]
-        (cond
-          (= len text-length) extended
-          (< len text-length) (recur (str extended extended))
-          (> len text-length) (->> extended
-                                   (take text-length)
-                                   (apply str)))))))
+  (let [text-len     (count text)
+        repeat-count (math/ceil (/ text-len
+                                   (count key)))]
+  (->> key
+       (repeat repeat-count)
+       (take text-len)
+       (apply str))))
 
 (defn- ^String worker
   "Worker does the actual work of encoding/decoding a Virgenere
