@@ -9,10 +9,10 @@
   [text n-rows n-cols]
   (let [arr   (make-array Character/TYPE n-rows n-cols)
         index (atom 0)]
-    (dotimes [col n-cols]
-      (dotimes [row n-rows]
-        (aset arr row col (get text @index))
-        (reset! index (inc @index))))
+    (doseq [col (range n-cols)
+            row (range n-rows)]
+      (aset arr row col (get text @index))
+      (reset! index (inc @index)))
     arr))
 
 (defn- generate-decipher-matrix
@@ -21,30 +21,31 @@
    :static true}
   [key key-map n-rows n-cols cipher-matrix]
   (let [arr (make-array Character/TYPE n-rows n-cols)]
-    (dotimes [col n-cols]
-      (let [chr       (get key col)
-            col-index (get key-map chr)]
-        (dotimes [row n-rows]
-          (aset arr row col (aget cipher-matrix row col-index)))))
+    (doseq [col (range n-cols)
+            row (range n-rows)
+            :let [char  (get key col)
+                  index (get key-map char)
+                  value (aget cipher-matrix row index)]]
+      (aset arr row col value))
     arr))
 
-(defn- ^PersistentHashMap generate-key-map [key]
-  (let [index (atom 0)]
-    (->> (for [entry (zipmap key (range))
-               :let [[k _] entry
-                     value [k @index]
-                     _ (swap! index inc)]]
-           value)
-         (into {}))))
+(defn- ^PersistentHashMap generate-key-map
+  "Generate a mapping of the characters with in the key, to their
+   ordinal position.
+   e.g. foobar -> {\\a 0, \\b 1, \\f 2, \\o 3, \\r 4}"
+  [key]
+  (->> (zipmap (sort key)
+               (range))
+       (into {})))
 
 (defn ^String columnar-transposition
   "https://en.wikipedia.org/wiki/Transposition_cipher#Columnar_transposition"
   [^String text ^String key]
   (let [n-cols (count key)
         n-rows (-> (count text)
-                 (/ n-cols)
-                 (math/ceil)
-                 int)
+                   (/ n-cols)
+                   (math/ceil)
+                   int)
         key-map         (generate-key-map key)
         cipher-matrix   (generate-columnar-matrix text n-rows n-cols)
         decipher-matrix (generate-decipher-matrix key key-map n-rows n-cols cipher-matrix)]
@@ -55,7 +56,7 @@
         (apply str letters)
         (if (>= col n-cols)
           (recur (inc row) 0 letters)
-          (let [letter (aget decipher-matrix row col)]
+          (let [letter (char (aget decipher-matrix row col))]
             (recur row
                    (inc col)
                    (conj letters letter))))))))

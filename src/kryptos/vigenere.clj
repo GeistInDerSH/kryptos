@@ -11,17 +11,15 @@
   ([key] (generate-keyed-alphabet key default-alphabet))
   ([key given-alphabet]
    {:pre [(= (count given-alphabet) ;; Check that no chars are added to the alphabet by the key
-             (->> (concat key given-alphabet)
-                  (into #{})
-                  count))
+             (count (set (str given-alphabet key))))
           (= (count key) ;; Ensure the key doesn't repeat characters
-             (count (into #{} key)))]}
-   (loop [chrs     (seq key)
-          alphabet given-alphabet]
-     (if-let [[chr & rst] chrs]
-       (recur rst
+             (count (set key)))]}
+   (loop [[c & r :as xs] (seq key)
+          alphabet       given-alphabet]
+     (if xs
+       (recur r
               (string/replace alphabet
-                              (str chr)
+                              (str c)
                               ""))
        (str key alphabet)))))
 
