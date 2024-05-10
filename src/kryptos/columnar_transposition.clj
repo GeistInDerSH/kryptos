@@ -6,11 +6,11 @@
   "Generate a 2d Java array with the text in the columnar order"
   {:tag "[[Ljava.lang.Character;"
    :static true}
-  [text rows cols]
-  (let [arr (make-array Character/TYPE rows cols)
+  [text n-rows n-cols]
+  (let [arr   (make-array Character/TYPE n-rows n-cols)
         index (atom 0)]
-    (dotimes [col cols]
-      (dotimes [row rows]
+    (dotimes [col n-cols]
+      (dotimes [row n-rows]
         (aset arr row col (get text @index))
         (reset! index (inc @index))))
     arr))
@@ -19,12 +19,12 @@
   "Generate a 2d Java array to use to decode the cipher text"
   {:tag "[[Ljava.lang.Character;"
    :static true}
-  [key key-map rows cols cipher-matrix]
-  (let [arr (make-array Character/TYPE rows cols)]
-    (dotimes [col cols]
-      (let [chr (get key col)
+  [key key-map n-rows n-cols cipher-matrix]
+  (let [arr (make-array Character/TYPE n-rows n-cols)]
+    (dotimes [col n-cols]
+      (let [chr       (get key col)
             col-index (get key-map chr)]
-        (dotimes [row rows]
+        (dotimes [row n-rows]
           (aset arr row col (aget cipher-matrix row col-index)))))
     arr))
 
@@ -40,20 +40,20 @@
 (defn ^String columnar-transposition
   "https://en.wikipedia.org/wiki/Transposition_cipher#Columnar_transposition"
   [^String text ^String key]
-  (let [cols (count key)
-        rows (-> (count text)
-                 (/ cols)
+  (let [n-cols (count key)
+        n-rows (-> (count text)
+                 (/ n-cols)
                  (math/ceil)
                  int)
-        key-map (generate-key-map key)
-        cipher-matrix (generate-columnar-matrix text rows cols)
-        decipher-matrix (generate-decipher-matrix key key-map rows cols cipher-matrix)]
+        key-map         (generate-key-map key)
+        cipher-matrix   (generate-columnar-matrix text n-rows n-cols)
+        decipher-matrix (generate-decipher-matrix key key-map n-rows n-cols cipher-matrix)]
     (loop [row 0
            col 0
            letters []]
-      (if (>= row rows)
+      (if (>= row n-rows)
         (apply str letters)
-        (if (>= col cols)
+        (if (>= col n-cols)
           (recur (inc row) 0 letters)
           (let [letter (aget decipher-matrix row col)]
             (recur row

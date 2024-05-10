@@ -21,7 +21,7 @@
 (def ^:static k4-solution "¯\\_(ツ)_/¯")
 
 (defn get-solutions []
-  (let [key "kryptos"
+  (let [key    "kryptos"
         sol-k1 (vigenere/decode k1 "palimpsest" key)
         sol-k2 (vigenere/decode k2 "abscissa" key)
         sol-k3 (transposition/double-columnar-transposition k3 "utsrqponmlkjihgfedcba" "~}zyxwvutsrqponmlkjihgfedcba")]

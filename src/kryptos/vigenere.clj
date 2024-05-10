@@ -16,7 +16,7 @@
                   count))
           (= (count key) ;; Ensure the key doesn't repeat characters
              (count (into #{} key)))]}
-   (loop [chrs (seq key)
+   (loop [chrs     (seq key)
           alphabet given-alphabet]
      (if-let [[chr & rst] chrs]
        (recur rst
@@ -46,18 +46,19 @@
   [text key alpha-key reducer]
   {:pre [(some? (get #{#'- #'+} reducer))]}
   (let [keyed-alphabet (generate-keyed-alphabet alpha-key)
-        pos-map (zipmap keyed-alphabet (range))
-        extended-key (extend-key-to-text text key)
-        pairs (mapv vector text extended-key)]
+        pos-map        (zipmap keyed-alphabet (range))
+        extended-key   (extend-key-to-text text key)
+        pairs          (mapv vector text extended-key)]
     (loop [plain-text []
-           pairs pairs]
+           pairs      pairs]
       (if (seq pairs)
         (let [[pair & remainder] pairs
-              [t-char k-char] pair
-              t-pos (get pos-map t-char)
-              k-pos (get pos-map k-char)
-              pos (-> (reducer t-pos k-pos)
-                      (mod 26))]
+              t-char (first pair)
+              k-char (peek pair)
+              t-pos  (get pos-map t-char)
+              k-pos  (get pos-map k-char)
+              pos    (-> (reducer t-pos k-pos)
+                         (mod 26))]
           (recur (conj plain-text (get keyed-alphabet pos))
                  remainder))
         (apply str plain-text)))))
