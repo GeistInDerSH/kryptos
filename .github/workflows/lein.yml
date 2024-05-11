@@ -28,4 +28,4 @@ jobs:
         run: lein check
 
       - name: Run tests
-        run: lein cloverage -e learning-clojure.main
+        run: lein test
