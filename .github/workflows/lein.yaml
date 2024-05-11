@@ -1,0 +1,30 @@
+name: CI Tests
+
+on:
+  push:
+    branches:
+      - '*'
+    paths:
+      - 'src/**/*.clj'
+      - 'test/**/*.clj'
+      - '.github/workflows/lein.yml'
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: lein deps
+
+      - name: Check for reflections
+        run: lein check
+
+      - name: Run tests
+        run: lein cloverage -e learning-clojure.main
