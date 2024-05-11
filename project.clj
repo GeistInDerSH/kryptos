@@ -5,7 +5,6 @@
   :global-vars {*warn-on-reflection* true}
   :license {:name "Eclipse Public License - v 2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
-  :offline? true
   :dependencies [[org.clojure/clojure "1.11.3"]]
   :repl-options {:init-ns kryptos.core}
   :profiles {:uberjar {:aot :all
