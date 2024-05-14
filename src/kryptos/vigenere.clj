@@ -1,14 +1,13 @@
 (ns kryptos.vigenere
   (:require [clojure.string :as string]
-            [clojure.math :as math]))
-
-(def ^:private ^:static default-alphabet "abcdefghijklmnopqrstuvwxyz")
+            [clojure.math :as math]
+            [kryptos.alphabet :as alphabet]))
 
 (defn- ^String generate-keyed-alphabet
   "Generate an alphabet that starts with the given key.
    The key must not have any repeated characters, and must
    not add any new characters to the given-alphabet"
-  ([key] (generate-keyed-alphabet key default-alphabet))
+  ([key] (generate-keyed-alphabet key alphabet/lower-case))
   ([key given-alphabet]
    {:pre [(= (count given-alphabet) ;; Check that no chars are added to the alphabet by the key
              (count (set (str given-alphabet key))))
