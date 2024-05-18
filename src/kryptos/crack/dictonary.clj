@@ -1,6 +1,7 @@
-(ns kryptos.crack.dictonary)
+(ns kryptos.crack.dictonary
+  (:require [clojure.java.io :as io]))
 
-(def ^:private dict-file "/etc/dictionaries-common/words")
+(def ^:private dict-file (io/resource "unix-common-words"))
 
 (defn- load-word-dictionary
   "Load words from a file that can be used as a dictionary for trying to break ciphers.
