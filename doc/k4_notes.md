@@ -20,6 +20,11 @@ on commonly used characters, e.g. e, t, a, etc.
 ### Websites
 * https://en.wikipedia.org/wiki/Baudot_code
 
+## ASCII
+ASCII is also a possible encoding system. While the text by default is 
+8 bits, it's also possible to encode them into 5 bits just like 
+Baudot codes.
+
 ## Baudot + Vigenere
 
 The goal here isn't to solve it (well, that would be nice though). Instead, we want to filter for some known words
@@ -46,3 +51,26 @@ confidence rating to back that up
          (pmap #(vigenere/decode text % key))
          (filterv #(clojure.string/includes? % "east"))))
 ```
+
+Swapping in `ita2` or `5-bit-ascii` as the encoder does produce some interesting results,
+but nothing that isn't babble. Additionally, neither produces anything when filtering for
+`berlin`, or `northeast`.
+
+## Frequency Analysis of K4 Using Encoders
+Using the following code, we can generate a mapping from the encoder
+to the frequency map of the characters within the converted string.
+```clojure
+(->> (for [e ['baudot/ita1 'baudot/ita2 'ascii/ascii-5-bit] 
+           :let [encoder-name (name e) 
+                 encoder      (eval e) 
+                 text         (decoder/decode-string-with-bit-encoder-as-str k4 encoder)]] 
+       {encoder-name (frequencies text)})
+     (into {}))
+```
+
+For the sake of making it easier to read, here is a graph for 
+each of the above encoders.
+![frequency map](frequency.png)
+
+ASCII contains characters for all but `q`, while both Baudot codes
+are missing several characters.
