@@ -34,12 +34,13 @@ confidence rating to back that up
 (ns kryptos.example
   (:require [clojure.string :as string]
             [kryptos.vigenere :as virgnere]
-            [kryptos.crack.dictionary :as dictonary]))
+            [kryptos.crack.dictionary :as dictonary]
+            [kryptos.encoding.decoder :as decoder]))
 
 (def dict (->> (dictionary/load-word-dictionary)
                (map #'string/lower-case))
 
-  (let [text (foo k4 ita1)
+  (let [text (decoder/decode-string-with-bit-encoder-as-str k4 ita1)
         key "kryptos"]
     (->> dict
          (pmap #(vigenere/decode text % key))
