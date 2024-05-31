@@ -1,4 +1,4 @@
-(ns kryptos.vigenere-test
+(ns kryptos.ciphers.vigenere-test
   (:require [clojure.test :refer :all]
             [kryptos.vigenere :as vigenere]))
 

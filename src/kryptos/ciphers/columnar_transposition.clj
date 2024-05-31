@@ -1,4 +1,4 @@
-(ns kryptos.columnar-transposition
+(ns kryptos.ciphers.columnar-transposition
   (:require [clojure.math :as math])
   (:import (clojure.lang PersistentHashMap)))
 

@@ -38,7 +38,7 @@ confidence rating to back that up
 ```clojure
 (ns kryptos.example
   (:require [clojure.string :as string]
-            [kryptos.vigenere :as virgnere]
+            [kryptos.ciphers.vigenere :as virgnere]
             [kryptos.crack.dictionary :as dictonary]
             [kryptos.encoding.decoder :as decoder]))
 

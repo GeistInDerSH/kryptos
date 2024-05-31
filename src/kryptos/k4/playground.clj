@@ -5,7 +5,7 @@
             [kryptos.encoding.decoder :as decoder]
             [kryptos.encoding.baudot :as baudot]
             [kryptos.encoding.ascii :as ascii]
-            [kryptos.vigenere :as vigenere]))
+            [kryptos.ciphers.vigenere :as vigenere]))
 
 (def known-words "Known words in the k4 solution" ["clock" "berlin" "east" "northeast"])
 (def dict (->> (clojure.java.io/resource "extended-words")

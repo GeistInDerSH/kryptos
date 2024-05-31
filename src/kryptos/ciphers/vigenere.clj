@@ -1,4 +1,4 @@
-(ns kryptos.vigenere
+(ns kryptos.ciphers.vigenere
   (:require [clojure.string :as string]
             [clojure.math :as math]
             [kryptos.alphabet :as alphabet]))

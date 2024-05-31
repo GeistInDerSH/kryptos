@@ -1,7 +1,7 @@
 (ns kryptos.core
   (:require [clojure.string :as string]
-            [kryptos.vigenere :as vigenere]
-            [kryptos.columnar-transposition :as transposition])
+            [kryptos.ciphers.vigenere :as vigenere]
+            [kryptos.ciphers.columnar-transposition :as transposition])
   (:gen-class))
 
 (defn- solution-format [text]
