@@ -19,4 +19,4 @@
 (defn decode-string-with-bit-encoder-as-str
   [text conversion-map]
   (apply str
-         (decode-string-with-bit-encoder-as-str text conversion-map)))
+         (decode-string-with-bit-encoder text conversion-map)))
