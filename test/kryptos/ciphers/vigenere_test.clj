@@ -1,6 +1,6 @@
 (ns kryptos.ciphers.vigenere-test
   (:require [clojure.test :refer :all]
-            [kryptos.vigenere :as vigenere]))
+            [kryptos.ciphers.vigenere :as vigenere]))
 
 (deftest vigenere
   (testing "encoding"
