@@ -29,18 +29,19 @@ Expanding this with an extended dictionary of
 either. 
 Maybe it's not a Vigenere? It's likely worth doing some kind of frequency analysis on the `pmap` result to get a 
 confidence rating to back that up
+
 ```clojure
 (ns kryptos.example
-  (:require [clojure.string :as string] 
+  (:require [clojure.string :as string]
             [kryptos.vigenere :as virgnere]
-            [kryptos.crack.dictonary :as dictonary]))
+            [kryptos.crack.dictionary :as dictonary]))
 
 (def dict (->> (dictionary/load-word-dictionary)
                (map #'string/lower-case))
 
-(let [text (foo k4 ita1)
-      key "kryptos"]
-  (->> dict
-       (pmap #(vigenere/decode text % key))
-       (filterv #(clojure.string/includes? % "east"))))
+  (let [text (foo k4 ita1)
+        key "kryptos"]
+    (->> dict
+         (pmap #(vigenere/decode text % key))
+         (filterv #(clojure.string/includes? % "east"))))
 ```
