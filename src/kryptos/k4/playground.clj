@@ -39,8 +39,17 @@
           (pmap #(vigenere/decode text % possible-key))
           (filterv #(string/includes? % known-word))))))
 
-(defn brute-force-all-known-words-with-encoder [encoder]
-  (->> known-words
-       (mapv (fn [word]
-               {word (brute-force-with-encoder word encoder)}))
-       (into {})))
+(defn brute-force-all-known-words-with-encoder
+  ([] (->> encoders
+           (map (fn [e]
+                  (let [encoder (eval e)
+                        encoder-name (name e)
+                        words (brute-force-all-known-words-with-encoder encoder)]
+                    {encoder-name words})))
+           (into {})))
+  ([encoder] (brute-force-all-known-words-with-encoder encoder known-words))
+  ([encoder words]
+   (->> words
+        (mapv (fn [word]
+                {word (brute-force-with-encoder word encoder)}))
+        (into {}))))
