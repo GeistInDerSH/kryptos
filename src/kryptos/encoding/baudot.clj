@@ -1,4 +1,5 @@
-(ns kryptos.encoding.baudot)
+(ns kryptos.encoding.baudot
+  (:require [kryptos.encoding.helper :as helper]))
 
 (def ita1 {\a "10000", \b "00110", \c "10110", \d "11110"
            \e "01000", \f "01110", \g "01010", \h "11010"
@@ -14,7 +15,7 @@
            \Q "10111", \R "00111", \S "00101", \T "10101"
            \U "10100", \V "11101", \W "01101", \X "01001"
            \Y "00100", \Z "11001"})
-
+(def reverse-ita1 (helper/reverse-map-value ita1))
 (def ita2 {\a "11000", \b "10011", \c "01110", \d "10010"
            \e "10000", \f "10110", \g "01011", \h "00101"
            \i "01100", \j "11010", \k "11110", \l "01001"
@@ -29,3 +30,4 @@
            \Q "11101", \R "01010", \S "10100", \T "00001"
            \U "11100", \V "01111", \W "11001", \X "10111"
            \Y "10101", \Z "10001"})
+(def reverse-ita2 (helper/reverse-map-value ita2))
