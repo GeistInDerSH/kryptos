@@ -8,11 +8,11 @@
             [kryptos.encoding.us-tty :as us-tty]
             [kryptos.ciphers.vigenere :as vigenere]))
 
-(def known-words "Known words in the k4 solution" ["clock" "berlin" "east" "northeast"])
+(def known-words "Known words in the k4 solution" ["clock" "berlin" "berlinclock" "east" "northeast" "eastnortheast"])
 (def dict (->> (clojure.java.io/resource "extended-words")
                (crack/load-word-dictionary)))
 (def encoders ['baudot/ita1 'baudot/ita2 'baudot/reverse-ita1 'baudot/reverse-ita2
-               'ascii/ascii-5-bit
+               'ascii/ascii-5-bit 'ascii/reverse-ascii-5-bit 'ascii/int-bits 'ascii/reverse-int-bits
                'us-tty/tty-codes 'us-tty/reverse-tty-codes])
 
 (defn frequency-analysis
@@ -25,7 +25,7 @@
                      encoder      (eval e) ;; Yes I know this is dangerous
                      txt (decoder/decode-string-with-bit-encoder-as-str text encoder)]
                  {encoder-name (frequencies txt)})))
-        (into {}))))
+        (into (sorted-map)))))
 
 (defn brute-force-with-encoder
   "Attempt to brute force with the vigenere cipher and some encoder"
