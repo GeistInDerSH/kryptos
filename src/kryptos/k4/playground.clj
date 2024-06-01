@@ -5,14 +5,18 @@
             [kryptos.encoding.decoder :as decoder]
             [kryptos.encoding.baudot :as baudot]
             [kryptos.encoding.ascii :as ascii]
+            [kryptos.encoding.us-tty :as us-tty]
             [kryptos.ciphers.vigenere :as vigenere]))
 
 (def known-words "Known words in the k4 solution" ["clock" "berlin" "east" "northeast"])
 (def dict (->> (clojure.java.io/resource "extended-words")
                (crack/load-word-dictionary)))
+(def encoders ['baudot/ita1 'baudot/ita2 'baudot/reverse-ita1 'baudot/reverse-ita2
+               'ascii/ascii-5-bit
+               'us-tty/tty-codes 'us-tty/reverse-tty-codes])
 
 (defn frequency-analysis
-  ([] (frequency-analysis  k4 ['baudot/ita1 'baudot/ita2 'ascii/ascii-5-bit]))
+  ([] (frequency-analysis  k4 encoders))
   ([text quoted-encoders]
    {:pre [(every? symbol? quoted-encoders)]}
    (->> quoted-encoders
