@@ -5,6 +5,7 @@
             [kryptos.encoding.decoder :as decoder]
             [kryptos.encoding.baudot :as baudot]
             [kryptos.encoding.ascii :as ascii]
+            [kryptos.encoding.bacon :as bacon]
             [kryptos.encoding.us-tty :as us-tty]
             [kryptos.ciphers.vigenere :as vigenere]))
 
@@ -12,7 +13,8 @@
 (def dict (->> (clojure.java.io/resource "extended-words")
                (crack/load-word-dictionary)))
 (def encoders ['baudot/ita1 'baudot/ita2 'baudot/reverse-ita1 'baudot/reverse-ita2
-               'ascii/ascii-5-bit 'ascii/reverse-ascii-5-bit 'ascii/int-bits 'ascii/reverse-int-bits
+               'ascii/ascii-5-bit 'ascii/reverse-ascii-5-bit
+               'bacon/bacon 'bacon/bacon-unique
                'us-tty/tty-codes 'us-tty/reverse-tty-codes])
 
 (defn frequency-analysis
